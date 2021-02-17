@@ -1,29 +1,31 @@
+echo '2.4 создание разделов'
 (
-	echo n;
-echo ;
-echo ;
-echo ;
-echo +512M;
-echo n;
-echo ;
-echo ;
-echo ;
-echo +5G;
-echo n;
-echo ;
-echo ;
-echo ;
-echo ;
-echo w;
-) | fdisk /dev/sda;
-echo mkfs.vfat /dev/sda1;
-echo mkfs.ext4 /dev/sda2;
-echo mkfs.ext4 /dev/sda3;
-echo mount /dev/sda2 /mnt;
-echo mkdir /mnt/boot;
-echo mkdir /mnt/home;
-echo mount /dev/sda1 /mnt/boot;
-echo mount /dev/sda3 /mnt/home;
-echo pacstrap /mnt base base-devel;
-echo genfstab -U /mnt >> /mnt/etc/fstab;
-echo arch-chroot /mnt;
+  echo o;
+
+  echo n;
+  echo;
+  echo;
+  echo;
+  echo +100M;
+
+  echo n;
+  echo;
+  echo;
+  echo;
+  echo +20G;
+
+  echo n;
+  echo;
+  echo;
+  echo;
+  echo +1024M;
+
+  echo n;
+  echo p;
+  echo;
+  echo;
+  echo a;
+  echo 1;
+
+  echo w;
+) | fdisk /dev/sda
