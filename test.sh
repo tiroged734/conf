@@ -51,7 +51,7 @@ mount /dev/sda3 /mnt/home
 echo "Server = http://mirror.yandex.ru/archlinux/\$repo/os/\$arch" > /etc/pacman.d/mirrorlist
 
 echo '3.2 Установка основных пакетов'
-pacstrap base base-devel linux linux-firmware vim dhcpcd netctl
+pacstrap /mnt base base-devel linux linux-firmware vim dhcpcd netctl
 
 echo '3.3 Настройка системы'
 genfstab -pU /mnt >> /mnt/etc/fstab
