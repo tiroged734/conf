@@ -1,0 +1,13 @@
+set $mod Mod4
+
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+
+bindsym $dom-Shift-q kill
+bindsym $mod-d exec --no-startup-id dmenu_run
+bindsym $mod-Return exec i3-sensible-terminal
+
+bar {
+	mode hide
+	hidden_state hide
+	status_command i3status
+}

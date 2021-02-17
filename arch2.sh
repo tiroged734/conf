@@ -64,7 +64,7 @@ echo 'Ставим иксы и драйвера'
 pacman -S $gui_install
 
 echo "Ставим i3"
-pacman -S i3-gaps i3status terminator dmenu --noconfirm
+pacman -S i3-gaps terminator dmenu --noconfirm
 
 sudo pacman -Syu
 sudo pacman -S wget --noconfirm
