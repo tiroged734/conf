@@ -71,15 +71,15 @@ wget git.io/yay-install.sh && sh yay-install.sh --noconfirm
 
 systemctl enable lxdm
 
-sudo -u $username yay -Syy
-sudo -u $username yay -S sublime-text-dev polybar --noconfirm
-
 echo 'Подключаем автозагрузку менеджера входа и интернет'
 systemctl enable NetworkManager
 
-git clone https://github.com/tiroged734/conf.git
+sudo -u $username yay -Syy
+sudo -u $username yay -S sublime-text-dev polybar --noconfirm
 
-rm -r $HOME/.config/*
+sudo -u $username git clone https://github.com/tiroged734/conf.git
+
+sudo -u $username rm -r $HOME/.config/*
 
 for file in ./conf/dotfiles/*
 do
