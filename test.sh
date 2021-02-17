@@ -1,5 +1,6 @@
 echo '2.4 создание разделов'
 (
+  fdisk /dev/sda
   echo o;
 
   echo n;
@@ -28,4 +29,4 @@ echo '2.4 создание разделов'
   echo 1;
 
   echo w;
-) | fdisk /dev/sda
+)
