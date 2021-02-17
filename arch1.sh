@@ -32,7 +32,7 @@ timedatectl set-ntp true
 
 mkfs.vfat  /dev/sda1 -L boot
 mkfs.ext4  /dev/sda2 -L root
-mkfs.ext4  /dev/sda3 -L homevfat
+mkfs.ext4  /dev/sda3 -L home
 
 mount /dev/sda2 /mnt
 mkdir /mnt/{boot,home}
