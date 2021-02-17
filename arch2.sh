@@ -64,14 +64,25 @@ echo 'Ставим иксы и драйвера'
 pacman -S $gui_install
 
 echo "Ставим i3"
-pacman -S i3-gaps i3status terminator --noconfirm
+pacman -S i3-gaps i3status terminator dmenu --noconfirm
+
+sudo pacman -Syu
+sudo pacman -S wget --noconfirm
+wget git.io/yay-install.sh && sh yay-install.sh --noconfirm
 
 echo 'Cтавим DM'
 pacman -S lxdm --noconfirm
 systemctl enable lxdm
 
 echo 'Ставим шрифты'
-pacman -S ttf-liberation ttf-dejavu --noconfirm 
+pacman -S ttf-liberation ttf-dejavu --noconfirm
+
+echo 'Установка базовых программ и пакетов'
+sudo pacman -S reflector chromium flameshot firefox ufw neofetch rtorrent telegram-desktop f2fs-tools ntfs-3g alsa-lib alsa-utils p7zip unrar pulseaudio pavucontrol --noconfirm
+
+yay -Syy
+yay -S sublime-text-dev polybar --noconfirm
+
 
 echo 'Ставим сеть'
 pacman -S networkmanager network-manager-applet ppp --noconfirm
