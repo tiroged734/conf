@@ -2,6 +2,15 @@
 read -p "Введите имя компьютера: " hostname
 read -p "Введите имя пользователя: " username
 
+echo 'Добавляем пользователя'
+useradd -m -g users -G wheel -s /bin/bash $username
+
+echo 'Создаем root пароль'
+passwd
+
+echo 'Устанавливаем пароль пользователя'
+passwd $username
+
 echo 'Прописываем имя компьютера'
 echo $hostname > /etc/hostname
 ln -svf /usr/share/zoneinfo/Asia/Yekaterinburg /etc/localtime
@@ -34,14 +43,6 @@ grub-mkconfig -o /boot/grub/grub.cfg
 echo 'Ставим программу для Wi-fi'
 pacman -S dialog wpa_supplicant --noconfirm 
 
-echo 'Добавляем пользователя'
-useradd -m -g users -G wheel -s /bin/bash $username
-
-echo 'Создаем root пароль'
-passwd
-
-echo 'Устанавливаем пароль пользователя'
-passwd $username
 
 echo 'Устанавливаем SUDO'
 echo '%wheel ALL=(ALL) ALL' >> /etc/sudoers
