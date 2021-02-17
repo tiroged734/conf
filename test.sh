@@ -1,28 +1,28 @@
-fdisk /dev/sda
-echo "n\n"
-echo "\n"
-echo "\n"
-echo "\n"
-echo "+512M\n"
-echo "n\n"
-echo "\n"
-echo "\n"
-echo "\n"
-echo "+5G\n"
-echo "n\n"
-echo "\n"
-echo "\n"
-echo "\n"
-echo "\n"
-echo "w\n"
-echo "mkfs.vfat /dev/sda1\n"
-echo "mkfs.ext4 /dev/sda2\n"
-echo "mkfs.ext4 /dev/sda3\n"
-echo "mount /dev/sda2 /mnt\n"
-echo "mkdir /mnt/boot\n"
-echo "mkdir /mnt/home\n"
-echo "mount /dev/sda1 /mnt/boot\n"
-echo "mount /dev/sda3 /mnt/home\n"
-echo "pacstrap /mnt base base-devel\n"
-echo "genfstab -U /mnt >> /mnt/etc/fstab\n"
-echo "arch-chroot /mnt\n"
+fdisk /dev/sda;
+echo n;
+echo ;
+echo ;
+echo ;
+echo +512M;
+echo n;
+echo ;
+echo ;
+echo ;
+echo +5G;
+echo n;
+echo ;
+echo ;
+echo ;
+echo ;
+echo w;
+echo mkfs.vfat /dev/sda1;
+echo mkfs.ext4 /dev/sda2;
+echo mkfs.ext4 /dev/sda3;
+echo mount /dev/sda2 /mnt;
+echo mkdir /mnt/boot;
+echo mkdir /mnt/home;
+echo mount /dev/sda1 /mnt/boot;
+echo mount /dev/sda3 /mnt/home;
+echo pacstrap /mnt base base-devel;
+echo genfstab -U /mnt >> /mnt/etc/fstab;
+echo arch-chroot /mnt;
