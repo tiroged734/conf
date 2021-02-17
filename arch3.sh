@@ -1,5 +1,6 @@
 #!/bin/bash
-read -p "Введите имя пользователя: " username
+#read -p "Введите имя пользователя: " username
+username="user"
 
 echo 'Добавляем пользователя'
 useradd -m -g users -G wheel -s /bin/bash $username
