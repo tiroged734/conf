@@ -1,120 +1,87 @@
 #!/bin/bash
-mkdir ~/downloads
-cd ~/downloads
+read -p "Введите имя компьютера: " hostname
+read -p "Введите имя пользователя: " username
 
-echo 'Установка AUR (yay)'
-sudo pacman -Syu
-sudo pacman -S wget --noconfirm
+echo 'Добавляем пользователя'
+useradd -m -g users -G wheel -s /bin/bash $username
+
+echo 'Создаем root пароль'
+passwd
+
+echo 'Устанавливаем пароль пользователя'
+passwd $username
+
+echo 'Прописываем имя компьютера'
+echo $hostname > /etc/hostname
+ln -svf /usr/share/zoneinfo/Asia/Yekaterinburg /etc/localtime
+
+echo '3.4 Добавляем русскую локаль системы'
+echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
+echo "ru_RU.UTF-8 UTF-8" >> /etc/locale.gen 
+
+echo 'Обновим текущую локаль системы'
+locale-gen
+
+echo 'Указываем язык системы'
+echo 'LANG="ru_RU.UTF-8"' > /etc/locale.conf
+
+echo 'Вписываем KEYMAP=ru FONT=cyr-sun16'
+echo 'KEYMAP=ru' >> /etc/vconsole.conf
+echo 'FONT=cyr-sun16' >> /etc/vconsole.conf
+
+echo 'Создадим загрузочный RAM диск'
+mkinitcpio -p linux
+
+echo '3.5 Устанавливаем загрузчик'
+pacman -Syy
+pacman -S grub --noconfirm 
+grub-install /dev/sda
+
+echo 'Обновляем grub.cfg'
+grub-mkconfig -o /boot/grub/grub.cfg
+
+echo 'Ставим программу для Wi-fi'
+pacman -S dialog wpa_supplicant --noconfirm 
+
+
+echo 'Устанавливаем SUDO'
+echo '%wheel ALL=(ALL) ALL' >> /etc/sudoers
+
+echo 'Раскомментируем репозиторий multilib Для работы 32-битных приложений в 64-битной системе.'
+echo '[multilib]' >> /etc/pacman.conf
+echo 'Include = /etc/pacman.d/mirrorlist' >> /etc/pacman.conf
+pacman -Syy
+
+echo 'Ставим иксы и драйвера'
+pacman -S xorg-server xorg-drivers xorg-xinit virtualbox-guest-utils
+
+echo "Ставим i3"
+pacman -S i3-gaps terminator lxdm wget neofetch --noconfirm
+
 wget git.io/yay-install.sh && sh yay-install.sh --noconfirm
 
-echo 'Создаем нужные директории'
-sudo pacman -S xdg-user-dirs --noconfirm
-xdg-user-dirs-update
+systemctl enable lxdm
 
-echo 'Установка базовых программ и пакетов'
-sudo pacman -S reflector firefox firefox-i18n-ru ufw f2fs-tools dosfstools ntfs-3g alsa-lib alsa-utils file-roller p7zip unrar gvfs aspell-ru pulseaudio pavucontrol --noconfirm
+echo 'Подключаем автозагрузку менеджера входа и интернет'
+systemctl enable NetworkManager
 
-echo 'Установить рекомендумые программы?'
-read -p "1 - Да, 0 - Нет: " prog_set
-if [[ $prog_set == 1 ]]; then
-  #Можно заменить на pacman -Qqm > ~/.pacmanlist.txt
-  sudo pacman -S recoll chromium flameshot obs-studio veracrypt vlc freemind filezilla gimp libreoffice libreoffice-fresh-ru kdenlive neofetch qbittorrent galculator telegram-desktop viewnior --noconfirm
-  yay -Syy
-  yay -S xflux sublime-text-dev hunspell-ru pamac-aur-git megasync-nopdfium trello xorg-xkill ttf-symbola ttf-clear-sans --noconfirm
-elif [[ $prog_set == 0 ]]; then
-  echo 'Установка программ пропущена.'
-fi
+sudo -u $username
 
-echo 'Скачать и установить конфиг и темы для XFCE?'
-read -p "1 - Да, 0 - Нет: " xfce_set
-if [[ $xfce_set == 1 ]]; then
-  echo 'Качаем и устанавливаем настройки Xfce'
-  # Чтобы сделать копию ваших настоек перейдите в домашнюю директорию ~/username 
-  # открйте в этой категории терминал и выполните команду ниже
-  # Предварительно можно очистить конфиг от всего лишнего
-  # tar -czf config.tar.gz .config
-  # Выгрузите архив в интернет и скорректируйте ссылку на свою.
-  wget https://github.com/ordanax/arch/raw/master/attach/config.tar.gz
-  sudo rm -rf ~/.config/xfce4/*
-  sudo tar -xzf config.tar.gz -C ~/
-  echo 'Удаление тем по умолчанию'
-  sudo rm -rf /usr/share/themes/*
-  echo 'Установка тем'
-  yay -S x-arc-shadow papirus-maia-icon-theme-git breeze-default-cursor-theme --noconfirm
-  sudo pacman -S capitaine-cursors --noconfirm
-  
-  echo 'Ставим лого ArchLinux в меню'
-  wget git.io/arch_logo.png
-  sudo mv -f ~/downloads/arch_logo.png /usr/share/pixmaps/arch_logo.png
-  
-  echo 'Удаляем лишнее из xfce4'
-  sudo pacman -Rs xfburn orage parole mousepad xfce4-appfinder xfce4-clipman-plugin xfce4-timer-plugin xfce4-time-out-plugin xfce4-artwork xfce4-taskmanager xfce4-smartbookmark-plugin xfce4-sensors-plugin xfce4-screenshooter xfce4-notes-plugin xfce4-netload-plugin xfce4-mpc-plugin xfce4-mount-plugin xfce4-mailwatch-plugin xfce4-genmon-plugin xfce4-fsguard-plugin xfce4-eyes-plugin xfce4-diskperf-plugin xfce4-dict xfce4-cpugraph-plugin xfce4-cpufreq-plugin
+yay -Syy
+yay -S polybar --noconfirm
 
-  echo 'Ставим обои на рабочий стол'
-  wget git.io/bg.jpg
-  sudo rm -rf /usr/share/backgrounds/xfce/* #Удаляем стандартные обои
-  sudo mv -f ~/downloads/bg.jpg /usr/share/backgrounds/xfce/bg.jpg
-elif [[ $xfce_set == 0 ]]; then
-  echo 'Установка конфигов XFCE пропущена.'
-fi 
+git clone https://github.com/tiroged734/conf.git
 
-echo "Ставим i3 с моими настройками?"
-read -p "1 - Да, 2 - Нет: " vm_setting
-if [[ $vm_setting == 1 ]]; then
-    pacman -S pacman -S i3-wm polybar dmenu pcmanfm ttf-font-awesome feh gvfs udiskie xorg-xbacklight ristretto tumbler compton jq --noconfirm
-    yay -S polybar ttf-weather-icons ttf-clear-sans
-    wget https://github.com/ordanax/arch/raw/master/attach/config_i3wm.tar.gz
-    sudo rm -rf ~/.config/i3/*
-    sudo rm -rf ~/.config/polybar/*
-    sudo tar -xzf config_i3wm.tar.gz -C ~/
-elif [[ $vm_setting == 2 ]]; then
-  echo 'Пропускаем.'
-fi
+rm -r $HOME/.config/*
 
-echo 'Установить conky?'
-read -p "1 - Да, 0 - Нет: " conky_set
-if [[ $conky_set == 1 ]]; then
-  sudo pacman -S conky conky-manager --noconfirm
-  wget git.io/conky.tar.gz
-  tar -xzf conky.tar.gz -C ~/
-elif [[ $conky_set == 0 ]]; then
-  echo 'Установка conky пропущена.'
-fi
+for file in ./conf/dotfiles/*
+do
+tempfile="$HOME/.config/${BASH_REMATCH[1]}"
+ln -s "$file" "$tempfile"
+ln -s "$tempfile" "${tempfile%.*}"
+done
 
-echo 'Делаем авто вход без DE?'
-read -p "1 - Да, 0 - Нет: " node_set
-if [[ $node_set == 1 ]]; then
-sudo systemctl disable lxdm
-sudo pacman -R lxdm
-sudo pacman -S xorg-xinit --noconfirm
-cp /etc/X11/xinit/xserverrc ~/.xserverrc
-wget https://raw.githubusercontent.com/ordanax/arch/master/attach/.xinitrc
-sudo mv -f .xinitrc ~/.xinitrc
-wget https://raw.githubusercontent.com/ordanax/arch/master/attach/.bashrc
-rm ~/.bashrc
-sudo mv -f .bashrc ~/.bashrc
-wget https://raw.githubusercontent.com/ordanax/arch/master/attach/grub
-sudo mv -f grub /etc/default/grub
-sudo grub-mkconfig -o /boot/grub/grub.cfg
-read -p "Введите имя пользователя: " username
-sudo echo -e '[Service]\nExecStart=\nExecStart=-/usr/bin/agetty --autologin' "$username" '--noclear %I $TERM' > ~/downloads/override.conf
-sudo mkdir /etc/systemd/system/getty@tty1.service.d/
-sudo mv -f ~/downloads/override.conf /etc/systemd/system/getty@tty1.service.d/override.conf
-elif [[ $node_set == 0 ]]; then
-  echo 'Пропускаем.'
-fi
-
-# Подключаем zRam
-yay -S zramswap --noconfirm
-sudo systemctl enable zramswap.service
-
-echo 'Включаем сетевой экран'
-sudo ufw enable
-
-echo 'Добавляем в автозагрузку:'
-sudo systemctl enable ufw
-
-# Очистка
-rm -rf ~/downloads/
-
-echo 'Установка завершена!'
+echo 'Установка завершена! Перезагрузите систему.'
+echo 'Если хотите подключить AUR, установить мои конфиги XFCE, тогда после перезагрзки и входа в систему, установите wget (sudo pacman -S wget) и выполните команду:'
+echo 'wget https://git.io/JtMtC && sh arch3.sh'
+exit
