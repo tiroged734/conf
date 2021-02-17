@@ -62,8 +62,8 @@ fi
 echo 'Ставим иксы и драйвера'
 pacman -S $gui_install
 
-echo "Ставим XFCE"
-pacman -S xfce4 xfce4-goodies --noconfirm
+echo "Ставим i3"
+pacman -S i3-gaps i3status terminator --noconfirm
 
 echo 'Cтавим DM'
 pacman -S lxdm --noconfirm
@@ -80,5 +80,5 @@ systemctl enable NetworkManager
 
 echo 'Установка завершена! Перезагрузите систему.'
 echo 'Если хотите подключить AUR, установить мои конфиги XFCE, тогда после перезагрзки и входа в систему, установите wget (sudo pacman -S wget) и выполните команду:'
-echo 'wget git.io/arch3.sh && sh arch3.sh'
+echo 'wget https://git.io/JtMtC && sh arch3.sh'
 exit
