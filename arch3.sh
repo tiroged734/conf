@@ -1,5 +1,4 @@
 #!/bin/bash
-read -p "Введите имя компьютера: " hostname
 read -p "Введите имя пользователя: " username
 
 echo 'Добавляем пользователя'
@@ -12,7 +11,7 @@ echo 'Устанавливаем пароль пользователя'
 passwd $username
 
 echo 'Прописываем имя компьютера'
-echo $hostname > /etc/hostname
+echo mypc > /etc/hostname
 ln -svf /usr/share/zoneinfo/Asia/Yekaterinburg /etc/localtime
 
 echo '3.4 Добавляем русскую локаль системы'
@@ -58,14 +57,13 @@ pacman -S xorg-server xorg-drivers xorg-xinit virtualbox-guest-utils
 echo "Ставим i3"
 pacman -S i3-gaps terminator lxdm wget neofetch --noconfirm
 
-wget git.io/yay-install.sh && sh yay-install.sh --noconfirm
-
 systemctl enable lxdm
 
 echo 'Подключаем автозагрузку менеджера входа и интернет'
 systemctl enable NetworkManager
 
 sudo -u $username
+wget git.io/yay-install.sh && sh yay-install.sh --noconfirm
 
 yay -Syy
 yay -S polybar --noconfirm
