@@ -64,28 +64,23 @@ echo 'Ставим иксы и драйвера'
 pacman -S $gui_install
 
 echo "Ставим i3"
-pacman -S i3-gaps terminator dmenu --noconfirm
+pacman -S i3-gaps networkmanager network-manager-applet ppp terminator lxdm dmenu wget reflector chromium flameshot firefox ufw neofetch rtorrent telegram-desktop f2fs-tools ntfs-3g alsa-lib alsa-utils p7zip unrar pulseaudio pavucontrol --noconfirm
 
-sudo pacman -Syu
-sudo pacman -S wget --noconfirm
 wget git.io/yay-install.sh && sh yay-install.sh --noconfirm
 
-echo 'Cтавим DM'
-pacman -S lxdm --noconfirm
+git clone https://github.com/tiroged734/conf.git
+
+for file in ./conf/dotfiles/*
+do
+tempfile="$HOME/.config/${BASH_REMATCH[1]}"
+ln -s "$file" "$tempfile"
+ln -s "$tempfile" "${tempfile%.*}"
+done
+
 systemctl enable lxdm
-
-echo 'Ставим шрифты'
-pacman -S ttf-liberation ttf-dejavu --noconfirm
-
-echo 'Установка базовых программ и пакетов'
-sudo pacman -S reflector chromium flameshot firefox ufw neofetch rtorrent telegram-desktop f2fs-tools ntfs-3g alsa-lib alsa-utils p7zip unrar pulseaudio pavucontrol --noconfirm
 
 yay -Syy
 yay -S sublime-text-dev polybar --noconfirm
-
-
-echo 'Ставим сеть'
-pacman -S networkmanager network-manager-applet ppp --noconfirm
 
 echo 'Подключаем автозагрузку менеджера входа и интернет'
 systemctl enable NetworkManager
