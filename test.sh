@@ -1,5 +1,5 @@
-fdisk /dev/sda;
-echo n;
+(
+	echo n;
 echo ;
 echo ;
 echo ;
@@ -15,6 +15,7 @@ echo ;
 echo ;
 echo ;
 echo w;
+) | fdisk /dev/sda;
 echo mkfs.vfat /dev/sda1;
 echo mkfs.ext4 /dev/sda2;
 echo mkfs.ext4 /dev/sda3;
