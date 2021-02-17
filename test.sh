@@ -28,6 +28,9 @@ echo '2.4 создание разделов'
   echo;
   echo;
 
+  echo a;
+  echo 1;
+
   echo w;
 ) | fdisk /dev/sda
 
