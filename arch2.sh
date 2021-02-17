@@ -68,14 +68,6 @@ pacman -S i3-gaps networkmanager network-manager-applet ppp terminator lxdm dmen
 
 wget git.io/yay-install.sh && sh yay-install.sh --noconfirm
 
-git clone https://github.com/tiroged734/conf.git
-
-for file in ./conf/dotfiles/*
-do
-tempfile="$HOME/.config/${BASH_REMATCH[1]}"
-ln -s "$file" "$tempfile"
-ln -s "$tempfile" "${tempfile%.*}"
-done
 
 systemctl enable lxdm
 
@@ -84,6 +76,15 @@ yay -S sublime-text-dev polybar --noconfirm
 
 echo 'Подключаем автозагрузку менеджера входа и интернет'
 systemctl enable NetworkManager
+
+git clone https://github.com/tiroged734/conf.git
+
+for file in ./conf/dotfiles/*
+do
+tempfile="$HOME/.config/${BASH_REMATCH[1]}"
+ln -s "$file" "$tempfile"
+ln -s "$tempfile" "${tempfile%.*}"
+done
 
 echo 'Установка завершена! Перезагрузите систему.'
 echo 'Если хотите подключить AUR, установить мои конфиги XFCE, тогда после перезагрзки и входа в систему, установите wget (sudo pacman -S wget) и выполните команду:'
