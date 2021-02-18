@@ -9,9 +9,4 @@ git clone https://github.com/tiroged734/conf.git
 
 rm -r $HOME/.config/*
 
-for file in ./conf/dotfiles/*
-do
-tempfile="$HOME/.config/${BASH_REMATCH[1]}"
-ln -s "$file" "$tempfile"
-ln -s "$tempfile" "${tempfile%.*}"
-done
+find ~/conf/dotfiles/* -type d -exec ln -s {} ~/.config/ \;
