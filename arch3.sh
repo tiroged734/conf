@@ -64,21 +64,24 @@ echo 'Подключаем автозагрузку менеджера вход�
 systemctl enable NetworkManager
 
 sudo -u $username
-wget git.io/yay-install.sh && sh yay-install.sh --noconfirm
+wget git.io/yay-install.sh
 
-yay -Syy
-yay -S polybar --noconfirm
+(su -u $username sh yay-install.sh --noconfirm)
 
-git clone https://github.com/tiroged734/conf.git
+(su -u $username yay -Syy)
+(su -u $username yay -S polybar --noconfirm)
 
-rm -r $HOME/.config/*
+(su -u $username git clone https://github.com/tiroged734/conf.git)
 
+(su -u $username rm -r $HOME/.config/*)
+(su -u $username
 for file in ./conf/dotfiles/*
 do
 tempfile="$HOME/.config/${BASH_REMATCH[1]}"
 ln -s "$file" "$tempfile"
 ln -s "$tempfile" "${tempfile%.*}"
 done
+)
 
 echo 'Установка завершена! Перезагрузите систему.'
 echo 'Если хотите подключить AUR, установить мои конфиги XFCE, тогда после перезагрзки и входа в систему, установите wget (sudo pacman -S wget) и выполните команду:'
