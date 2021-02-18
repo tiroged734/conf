@@ -53,10 +53,12 @@ echo 'Include = /etc/pacman.d/mirrorlist' >> /etc/pacman.conf
 pacman -Syy
 
 echo 'Ставим иксы и драйвера'
-pacman -S xorg-server xorg-drivers xorg-xinit virtualbox-guest-utils
+# pacman -S xorg-server xorg-drivers xorg-xinit virtualbox-guest-utils
+pacman -S xorg-server xorg-drivers xorg-xinit
 
 echo "Ставим i3"
-pacman -S i3-gaps terminator lxdm wget neofetch git --noconfirm
+pacman -S i3-gaps terminator lxdm wget git --noconfirm
+# pacman -S i3-gaps terminator lxdm wget neofetch git --noconfirm
 
 systemctl enable lxdm
 
