@@ -1,6 +1,6 @@
 #!/bin/bash
-read -p "Введите имя компьютера: " hostname
-read -p "Введите имя пользователя: " username
+#read -p "Введите имя пользователя: " username
+username="user"
 
 echo 'Добавляем пользователя'
 useradd -m -g users -G wheel -s /bin/bash $username
@@ -12,7 +12,7 @@ echo 'Устанавливаем пароль пользователя'
 passwd $username
 
 echo 'Прописываем имя компьютера'
-echo $hostname > /etc/hostname
+echo mypc > /etc/hostname
 ln -svf /usr/share/zoneinfo/Asia/Yekaterinburg /etc/localtime
 
 echo '3.4 Добавляем русскую локаль системы'
@@ -52,41 +52,16 @@ echo '[multilib]' >> /etc/pacman.conf
 echo 'Include = /etc/pacman.d/mirrorlist' >> /etc/pacman.conf
 pacman -Syy
 
-echo "Куда устанавливем Arch Linux на виртуальную машину?"
-read -p "1 - Да, 0 - Нет: " vm_setting
-if [[ $vm_setting == 0 ]]; then
-  gui_install="xorg-server xorg-drivers xorg-xinit"
-elif [[ $vm_setting == 1 ]]; then
-  gui_install="xorg-server xorg-drivers xorg-xinit virtualbox-guest-utils"
-fi
-
 echo 'Ставим иксы и драйвера'
-pacman -S $gui_install
+pacman -S xorg-server xorg-drivers xorg-xinit virtualbox-guest-utils
 
 echo "Ставим i3"
-pacman -S i3-gaps networkmanager network-manager-applet ppp terminator lxdm dmenu wget reflector chromium flameshot firefox ufw neofetch rtorrent telegram-desktop f2fs-tools ntfs-3g alsa-lib alsa-utils p7zip unrar pulseaudio pavucontrol --noconfirm
-
-wget git.io/yay-install.sh && sh yay-install.sh --noconfirm
-
+pacman -S i3-gaps terminator lxdm wget neofetch git --noconfirm
 
 systemctl enable lxdm
 
 echo 'Подключаем автозагрузку менеджера входа и интернет'
 systemctl enable NetworkManager
-
-sudo -u $username yay -Syy
-sudo -u $username yay -S sublime-text-dev polybar --noconfirm
-
-sudo -u $username git clone https://github.com/tiroged734/conf.git
-
-sudo -u $username rm -r $HOME/.config/*
-
-for file in ./conf/dotfiles/*
-do
-tempfile="$HOME/.config/${BASH_REMATCH[1]}"
-ln -s "$file" "$tempfile"
-ln -s "$tempfile" "${tempfile%.*}"
-done
 
 echo 'Установка завершена! Перезагрузите систему.'
 echo 'Если хотите подключить AUR, установить мои конфиги XFCE, тогда после перезагрзки и входа в систему, установите wget (sudo pacman -S wget) и выполните команду:'
