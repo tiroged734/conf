@@ -63,21 +63,20 @@ systemctl enable lxdm
 echo 'Подключаем автозагрузку менеджера входа и интернет'
 systemctl enable NetworkManager
 
-sudo -u $username
-wget git.io/yay-install.sh
+su -u nobody wget git.io/yay-install.sh
 
-(su -u $username sh yay-install.sh --noconfirm)
+su -u nobody sh yay-install.sh --noconfirm)
 
-(su -u $username yay -Syy)
-(su -u $username yay -S polybar --noconfirm)
+su -u nobody yay -Syy)
+su -u nobody yay -S polybar --noconfirm)
 
-(su -u $username git clone https://github.com/tiroged734/conf.git)
+su -u nobody git clone https://github.com/tiroged734/conf.git)
 
-(su -u $username rm -r $HOME/.config/*)
-(su -u $username
+su -u nobody rm -r $HOME/.config/*)
+(su -u nobody
 for file in ./conf/dotfiles/*
 do
-tempfile="$HOME/.config/${BASH_REMATCH[1]}"
+tempfile="/home/$username/.config/${BASH_REMATCH[1]}"
 ln -s "$file" "$tempfile"
 ln -s "$tempfile" "${tempfile%.*}"
 done
